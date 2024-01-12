@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
                       // Customize the content inside the Card
                       child: ListTile(
                         title: Text(newsID['name'].toString()),
-                        subtitle: Text('Card Subtitle'),
+                        subtitle: Text(newsID['country'].toString()),
                         leading: Icon(Icons.read_more),
                       ),
                     ),
