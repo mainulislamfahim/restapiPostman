@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rest_api/api_request.dart';
+import 'package:rest_api/news.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,22 +19,18 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchNews();
+    fetchData();
   }
 
-  Future<void> fetchNews() async {
-    final response = await http.get(
-      Uri.parse("http://universities.hipolabs.com/search?name=middle"),
-    );
-    if (response.statusCode == 200) {
-      final List<dynamic> responseData = json.decode(response.body);
-
-      // final List<dynamic> newsData = responseData[''];
-      setState(() {
-        news = List<Map<String, dynamic>>.from(responseData);
+  Future<void> fetchData() async {
+    try {
+      await fetchNews((responseData) {
+        setState(() {
+          news = List<Map<String, dynamic>>.from(responseData);
+        });
       });
-    } else {
-      print("HTTP Error: ${response.statusCode}");
+    } catch (e) {
+      // Handle errors
     }
   }
 
@@ -53,7 +51,13 @@ class _HomeState extends State<Home> {
                 return Padding(
                   padding: EdgeInsets.all(10),
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  News(index: newsID['web_pages'])));
+                    },
                     child: Card(
                       elevation: 10,
                       // Customize the content inside the Card
